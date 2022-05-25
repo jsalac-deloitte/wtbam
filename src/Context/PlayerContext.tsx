@@ -9,6 +9,12 @@ export type PlayerContextProviderProps = {
   children: React.ReactNode;
 };
 
+export type QuestionLevelType = {
+  easy: number[];
+  medium: number[];
+  hard: number[];
+};
+
 export const PlayerContext = createContext<PlayerContextType | null>(null);
 
 export const PlayerContextProvider: React.FC<PlayerContextProviderProps> = ({

@@ -1,64 +1,121 @@
 import { useEffect, useState, useContext } from "react";
-import { PlayerContext } from "../Context/PlayerContext";
+import { PlayerContext, QuestionLevelType } from "../Context/PlayerContext";
 import PrizeContainer from "../components/PrizeContainer";
 import { PRIZES, QUESTION_ENDPOINT } from "../config/app";
 import API from "../axios";
+import { SetOfQuestionsType } from "../config/types";
+import QuestionContainer from "../components/QuestionContainer";
+import { HiPhone, HiHand, HiOutlineChevronDoubleRight } from "react-icons/hi";
 
 const GamePlay: React.FC = () => {
   const playerContext = useContext(PlayerContext);
+  const [levelOfDifficulty, setLevelOfDifficulty] = useState<string>("easy");
   const [currentPrize, setCurrentPrize] = useState<number>(1000);
   const [questionNumber, setQuestionNumber] = useState<number>(1);
+  const [isFinalQuestion, setIsFinalQuestion] = useState<boolean>(false);
+  const [questions, setQuestions] = useState<SetOfQuestionsType | null>(
+    {} as SetOfQuestionsType
+  );
 
-  const setPrize = () => {
-    setCurrentPrize(PRIZES[questionNumber + 1].prize);
-    setQuestionNumber(questionNumber + 1);
+  const QUESTION_LEVEL: QuestionLevelType = {
+    easy: [1, 2, 3, 4, 5],
+    medium: [6, 7, 8, 9, 10],
+    hard: [11, 12, 13, 14, 15, 16],
   };
 
-  const getQuestion = async (level: string) => {
-    try {
-      let response = await API.get(QUESTION_ENDPOINT + level);
-      console.log(response);
-    } catch (err) {
-      console.log(err);
+  const nextQuestion = (question: number): void => {
+    let level = "easy";
+    if (PRIZES.length === question) {
+      setIsFinalQuestion(true);
+    }
+    if (!isFinalQuestion) {
+      Object.keys(QUESTION_LEVEL).forEach((item) => {
+        if (
+          QUESTION_LEVEL[item as keyof QuestionLevelType].includes(question)
+        ) {
+          return (level = item);
+        }
+      });
+      setQuestionNumber(question);
+      setLevelOfDifficulty(level);
     }
   };
 
+  //trigger to play sound for the final question
   useEffect(() => {
-    getQuestion("easy");
-  }, [questionNumber]);
+    if (isFinalQuestion) {
+      //play sound
+    }
+  }, [isFinalQuestion]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let response = await API.get(QUESTION_ENDPOINT + levelOfDifficulty);
+      await setQuestions(response.data);
+    };
+
+    fetchData();
+  }, [levelOfDifficulty]);
 
   return (
-    <div className="h-full flex flex-col items-center ">
-      <div className="grow h-full flex justify-around px-4 w-full    ">
-        <div className="h-full grow flex flex-col bg-green-400 max-w-[80%] py-4 space-y-2">
-          <div className="w-full flex justify-between space-x-2 px-2">
-            <div className="flex h-24 w-1/3 bg-red-400 rounded-xl py-4 px-4  items-center">
-              <h1 className="font-gruppo  text-[30px]">
-                Player: <span>{playerContext?.user}</span>
-              </h1>
+    <div className="h-full flex flex-col py-4 px-2 space-y-2">
+      <div className="space-y-4 md:flex md:space-x-4">
+        <div className=" flex justify-center items-center">
+          <img src="./assets/wtbm logo.png" alt="WTBM Logo" className="h-48" />
+        </div>
+        <div className=" md:grow md:flex md:flex-col md:justify-between md:py-2 space-y-2">
+          <div className="bg-gray-300 rounded-xl py-2 px-4 font-barlow-condensed tracking-widest">
+            <div className="border-b border-gray-400">
+              <h2 className="flex justify-between  items-center ">
+                <span className="font-bold text-purple-600">Player : </span>{" "}
+                <span className="text-2xl ">{playerContext?.user}</span>
+              </h2>
             </div>
-            <div className="h-24 w-1/3 bg-red-400 rounded-xl py-4 px-4 flex items-center">
-              <h1 className="font-gruppo  text-[30px]">LIFE LINE OPTIONS</h1>
-            </div>
-            <div className="h-24 w-1/3 bg-red-400 rounded-xl py-4 px-4 flex items-center">
-              <h1 className="font-gruppo  text-[30px]">
-                Prize Value: <span>$1,000.00</span>
-              </h1>
+            <div>
+              <h2 className="flex justify-between items-center ">
+                <span className="font-bold text-purple-600">
+                  Question Prize :{" "}
+                </span>{" "}
+                <span className="text-2xl ">10,000.00</span>
+              </h2>
             </div>
           </div>
-          <div className="h-full flex  bg-orange-200 ">
-            <div className="flex flex-col grow items-center space-y-2">
-              <div className="w-full bg-gray-400 h-2/3 rounded-xl">
-                Question
-              </div>
-              <div className="w-full bg-blue-400 h-1/3 rounded-xl">
-                multipl choice
-              </div>
+
+          <div className="flex items-center justify-center  h-16 space-x-8 ">
+            <div
+              className="flex items-center justify-center h-14 w-14 border border-gray-400 rounded-full text-4xl text-gray-100"
+              title="click to call a friend"
+            >
+              <HiPhone />
+            </div>
+            <div
+              className="flex items-center justify-center h-14 w-14 border border-gray-400 rounded-full text-4xl text-gray-100"
+              title="click to remove 2 wrond answer"
+            >
+              <HiHand />
+            </div>
+            <div
+              className="flex items-center justify-center h-14 w-14 border border-gray-400 rounded-full text-4xl text-gray-100"
+              title="click to skip question"
+            >
+              <HiOutlineChevronDoubleRight />
             </div>
           </div>
         </div>
+      </div>
+      <div className="flex grow">
+        <div className="grow flex justify-center w-full items-center     ">
+          <div className="flex items-center h-full w-full rounded-xl">
+            {questions!.length > 0 && (
+              <QuestionContainer
+                item={questions![0]}
+                pickAnswer={() => alert("my answer is")}
+              />
+            )}
+          </div>
+        </div>
 
-        <PrizeContainer prizes={PRIZES} currentPrize={currentPrize} />
+        <PrizeContainer prizes={PRIZES} indexPrize={questionNumber - 1} />
       </div>
     </div>
   );
