@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import { PlayerContext, QuestionLevelType } from "../Context/PlayerContext";
 import PrizeContainer from "../components/PrizeContainer";
 import { PRIZES, QUESTION_ENDPOINT } from "../config/app";
@@ -16,6 +16,32 @@ const GamePlay: React.FC = () => {
   const [questions, setQuestions] = useState<SetOfQuestionsType | null>(
     {} as SetOfQuestionsType
   );
+  const [showVideo, setShowVideo] = useState<boolean>(true);
+  const [showGreeting, setShowGreeting] = useState<boolean>(false);
+
+  const videoSrc: string = "/assets/wtbam.mp4";
+  const videoPlayer = useRef<HTMLVideoElement>(null);
+
+  const myCallback = () => {
+    setShowVideo(false);
+    setShowGreeting(true);
+    greetPlayer();
+  };
+
+  const greetPlayer = async () => {
+    var msg = new SpeechSynthesisUtterance();
+
+    msg.text = `Hi ${
+      playerContext!.user
+    }. Welcome to. "Who wants to be a millionaire...". 
+          Are you ready to become the next millionaire...?.`;
+
+    msg.onend = function (e) {
+      setShowGreeting(false);
+    };
+
+    speechSynthesis.speak(msg);
+  };
 
   const QUESTION_LEVEL: QuestionLevelType = {
     easy: [1, 2, 3, 4, 5],
@@ -103,20 +129,49 @@ const GamePlay: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="flex grow">
-        <div className="grow flex justify-center w-full items-center     ">
-          <div className="flex items-center h-full w-full rounded-xl">
-            {questions!.length > 0 && (
-              <QuestionContainer
-                item={questions![0]}
-                pickAnswer={() => alert("my answer is")}
-              />
-            )}
+      {!showVideo && !showGreeting && (
+        <div className="flex grow">
+          <div className="grow flex justify-center w-full items-center     ">
+            <div className="flex items-center h-full w-full rounded-xl">
+              {questions!.length > 0 && (
+                <QuestionContainer
+                  item={questions![0]}
+                  pickAnswer={() => alert("my answer is")}
+                />
+              )}
+            </div>
+          </div>
+
+          <PrizeContainer prizes={PRIZES} indexPrize={questionNumber - 1} />
+        </div>
+      )}
+
+      {showVideo && (
+        <div className="h-full w-full flex items-center justify-center bg-transparent">
+          <video autoPlay onEnded={myCallback} ref={videoPlayer} muted={false}>
+            <source src={videoSrc} type="video/mp4" />
+            Your browser does not support the video tag. I suggest you upgrade
+            your browser.
+          </video>
+        </div>
+      )}
+
+      {showGreeting && (
+        <div className="grow w-full flex items-center justify-center ">
+          <div className="h-auto bg-purple-400 rounded-lg backdrop-blur-sm bg-opacity-20 px-4 py-8">
+            <h1 className="text-center text-white">
+              Hi
+              <span className="text-lg font-bold"> {playerContext!.user} </span>
+              <br />
+              <span className="">
+                "Welcome to. "Who wants to be a millionaire."
+              </span>
+              <br />
+              <span>Are you ready to become the next millionaire?</span>
+            </h1>
           </div>
         </div>
-
-        <PrizeContainer prizes={PRIZES} indexPrize={questionNumber - 1} />
-      </div>
+      )}
     </div>
   );
 };
