@@ -1,20 +1,3 @@
-import { LifeLineType } from "./types";
-
-export const LIFE_LINE: LifeLineType[] = [
-  {
-    key: "50/50",
-    description: "Remove 2 incorrect answer from the options",
-  },
-  {
-    key: "Call a friend",
-    description: "Ask a friend for help",
-  },
-  {
-    key: "Skip Question",
-    description: "The question will be skipped for the next question",
-  },
-];
-
 export const PRIZES: string[] = [
   "500.00",
   "1,000.00",

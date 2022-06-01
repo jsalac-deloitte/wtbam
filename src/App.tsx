@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Landing from "./pages/Landing";
 import ReadMe from "./pages/ReadMe";
 import GamePlay from "./pages/GamePlay";
-import WtbamVideo from "./pages/WtbamVideo";
+import EndGame from "./pages/EndGame";
 
 const App: React.FC = () => {
   return (
@@ -15,7 +15,7 @@ const App: React.FC = () => {
           <Route path="/" element={<Landing />}>
             <Route index element={<ReadMe />} />
             <Route path="/play" element={<GamePlay />} />
-            <Route path="/video" element={<WtbamVideo />} />
+            <Route path="/end-game" element={<EndGame />} />
           </Route>
         </Routes>
       </PlayerContextProvider>

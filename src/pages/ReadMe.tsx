@@ -16,7 +16,7 @@ const ReadMe: React.FC<ReadMeProps> = () => {
   };
 
   return (
-    <div className="px-4  grow flex flex-col justify-around ">
+    <div className="px-4  grow flex flex-col justify-around max-w-7xl mx-auto">
       <div className="flex justify-center  items-center px-2 ">
         <img
           src="./assets/wtbm logo.png"
@@ -25,12 +25,11 @@ const ReadMe: React.FC<ReadMeProps> = () => {
         />
       </div>
       <div className="text-white">
-        <h2 className="font-bold">Instructions</h2>
+        <h2 className="font-bold">Note:</h2>
         <p className="text-justify">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sint,
-          cupiditate. Exercitationem, numquam doloremque eos libero ullam
-          consequuntur itaque alias ea fuga maiores? Quibusdam molestiae ipsum
-          consequatur, quos rerum placeat accusantium?
+          This game is only made for fun, no copyright infrigment intended.
+          Please enjoy playing and become the next Millionaire!! Good and
+          enjoy!!
         </p>
       </div>
       <div className="flex flex-col space-y-2">
