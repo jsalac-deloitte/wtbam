@@ -20,10 +20,6 @@ const QuestionContainer: React.FC<QuestionProps> = ({
   const [removeFrom, setRemoveFrom] = useState<number>(-2);
 
   useEffect(() => {
-    console.log("data", item?.correctAnswer);
-  }, [item]);
-
-  useEffect(() => {
     const start = Math.floor(
       Math.random() * (item.incorrectAnswers.length - 1)
     );

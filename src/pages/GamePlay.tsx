@@ -102,7 +102,6 @@ const GamePlay: React.FC = () => {
    * ------------------------------------------
    */
   const fetchQuestion = async () => {
-    console.log("fetch questions");
     let response = await API.get(QUESTION_ENDPOINT + levelOfDifficulty);
     await setQuestions(response.data);
     setQuestionIndex(0);
@@ -165,7 +164,6 @@ const GamePlay: React.FC = () => {
    * --------------------------------------------
    */
   const pickAnswer = (isCorrect: boolean) => {
-    console.log(isCorrect);
     if (isCorrect) {
       if (!isFinalQuestion) {
         speakText("Your answer is correct!", function () {
@@ -248,6 +246,9 @@ const GamePlay: React.FC = () => {
       "You now have 2 minutes to talk to your friend and ask for help",
       () => {
         setUseCallAFriend(true);
+        setTimeout(() => {
+          speakText("Times up!, Please select your answer now.");
+        }, 120000);
       }
     );
   };
