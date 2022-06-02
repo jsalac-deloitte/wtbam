@@ -28,7 +28,7 @@ const ReadMe: React.FC<ReadMeProps> = () => {
         <h2 className="font-bold">Note:</h2>
         <p className="text-justify">
           This game is only made for fun, no copyright infrigment intended.
-          Please enjoy playing and become the next Millionaire!! Good and
+          Please enjoy playing and become the next Millionaire!! Good luck and
           enjoy!!
         </p>
       </div>
