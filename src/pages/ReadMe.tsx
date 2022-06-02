@@ -27,9 +27,9 @@ const ReadMe: React.FC<ReadMeProps> = () => {
       <div className="text-white">
         <h2 className="font-bold">Note:</h2>
         <p className="text-justify">
-          This game is only made for fun, no copyright infrigment intended.
-          Please enjoy playing and become the next Millionaire!! Good luck and
-          enjoy!!
+          This game is only made for fun, Please use Google Chrome for better
+          experience. Enjoy playing and become the next Millionaire!! Good luck
+          and enjoy!!
         </p>
       </div>
       <div className="flex flex-col space-y-2">
